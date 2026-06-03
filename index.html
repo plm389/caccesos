@@ -275,7 +275,8 @@
       accessChipRow: document.getElementById('accessChipRow'), accessEventName: document.getElementById('accessEventName'), accessHeading: document.getElementById('accessHeading'), accessCountValue: document.getElementById('accessCountValue'), accessCapacityBar: document.getElementById('accessCapacityBar'), accessCapacityText: document.getElementById('accessCapacityText'), plusButton: document.getElementById('plusButton'), minusButton: document.getElementById('minusButton'),
       totalChipRow: document.getElementById('totalChipRow'), totalEventName: document.getElementById('totalEventName'), totalCountValue: document.getElementById('totalCountValue'), totalCapacityBar: document.getElementById('totalCapacityBar'), totalCapacityText: document.getElementById('totalCapacityText'), totalAccessBreakdown: document.getElementById('totalAccessBreakdown')
     };
-    const gun = window.Gun(['https://gun-manhattan.herokuapp.com/gun', 'https://gunjs.herokuapp.com/gun']);
+    const gun = window.Gun(['https://peer.wallie.io/gun', 'https://gun-manhattan.herokuapp.com/gun', 'https://gunjs.herokuapp.com/gun']);
+    let syncTimer = null;
     let logsNode = null;
 
     function setTheme(theme) {
@@ -331,6 +332,15 @@
       const ownBase = location.origin + location.pathname;
       history.replaceState({}, '', ownBase + '?cfg=' + encodeURIComponent(encodeConfig(config)) + '#' + route);
     }
+    function pullLogsAndRefresh() {
+      if (!logsNode || !state.config) return;
+      logsNode.map().once((entry) => {
+        if (!entry || !entry.id) return;
+        state.logs[entry.id] = entry;
+        recomputeCounts();
+        renderCurrentRoute();
+      });
+    }
     function connectEvent(config) {
       state.config = config;
       state.logs = {};
@@ -342,6 +352,9 @@
       logsNode = eventNode.get('logs');
       eventNode.get('meta').put({ title: config.title, maxCapacity: config.maxCapacity, publicBaseUrl: config.publicBaseUrl, updatedAt: Date.now() });
       logsNode.map().on((entry) => { if (!entry || !entry.id) return; state.logs[entry.id] = entry; recomputeCounts(); renderCurrentRoute(); });
+      if (syncTimer) clearInterval(syncTimer);
+      syncTimer = setInterval(pullLogsAndRefresh, 1500);
+      pullLogsAndRefresh();
       renderCurrentRoute();
     }
     function recomputeCounts() {
@@ -357,7 +370,12 @@
     function addLog(kind, payload = {}) {
       if (!logsNode) return;
       const id = crypto.randomUUID ? crypto.randomUUID() : 'log-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
-      logsNode.get(id).put({ id, kind, ts: Date.now(), ...payload });
+      const entry = { id, kind, ts: Date.now(), ...payload };
+      state.logs[id] = entry;
+      recomputeCounts();
+      renderCurrentRoute();
+      logsNode.get(id).put(entry);
+      setTimeout(pullLogsAndRefresh, 250);
     }
     function occupancyState() { if (state.total > state.config.maxCapacity) return 'error'; if (state.total >= Math.round(state.config.maxCapacity * 0.85)) return 'warning'; return 'success'; }
     function occupancyLabel() { if (state.total > state.config.maxCapacity) return 'Aforo superado'; if (state.total >= Math.round(state.config.maxCapacity * 0.85)) return 'Aforo casi completo'; return 'Espacio disponible'; }
