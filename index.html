@@ -1,121 +1,72 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control de Aforo - Eventos</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div id="app">
-        <!-- PANEL DE CONFIGURACIÓN -->
-        <div id="configPanel" class="panel active">
-            <div class="container">
-                <h1>⚙️ Configuración del Evento</h1>
-                
-                <form id="configForm">
-                    <div class="form-group">
-                        <label for="eventTitle">Título del Evento *</label>
-                        <input type="text" id="eventTitle" placeholder="Ej: Concierto 2026" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="maxCapacity">Aforo Máximo *</label>
-                        <input type="number" id="maxCapacity" placeholder="Ej: 500" min="1" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="numAccess">Número de Accesos *</label>
-                        <input type="number" id="numAccess" placeholder="Ej: 4" min="1" max="10" required>
-                    </div>
-
-                    <div id="accessesContainer"></div>
-
-                    <button type="submit" class="btn btn-primary">Generar Códigos QR</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- PANEL DE CÓDIGOS QR -->
-        <div id="qrPanel" class="panel">
-            <div class="container">
-                <h1>📱 Códigos QR Generados</h1>
-                <p class="subtitle" id="eventTitleDisplay"></p>
-                
-                <div id="qrContainer" class="qr-grid"></div>
-
-                <div class="button-group">
-                    <button class="btn btn-secondary" onclick="app.backToConfig()">← Volver a Configuración</button>
-                    <button class="btn btn-success" onclick="app.downloadAllQR()">⬇️ Descargar todos los QR</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- PANEL DE CONTROL DE ACCESO -->
-        <div id="controlPanel" class="panel">
-            <div class="container control-container">
-                <div class="access-info">
-                    <h2 id="accessName"></h2>
-                    <p id="eventNameControl"></p>
-                </div>
-
-                <div class="counter-section">
-                    <div class="counter-display">
-                        <p class="counter-label">Personas en el acceso</p>
-                        <div class="counter-value" id="counter">0</div>
-                    </div>
-
-                    <div class="button-group">
-                        <button class="btn btn-lg btn-success" onclick="app.increment()">➕ Entrada</button>
-                        <button class="btn btn-lg btn-danger" onclick="app.decrement()">➖ Salida</button>
-                    </div>
-
-                    <button class="btn btn-secondary" onclick="app.resetCounter()">🔄 Reiniciar Contador</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- PANEL DE VISUALIZACIÓN GENERAL -->
-        <div id="dashboardPanel" class="panel">
-            <div class="container dashboard-container">
-                <h1 id="dashboardTitle"></h1>
-                
-                <div class="dashboard-stats">
-                    <div class="stat-card">
-                        <h3>Personas Totales</h3>
-                        <div class="stat-number" id="totalPeople">0</div>
-                    </div>
-
-                    <div class="stat-card">
-                        <h3>Aforo Máximo</h3>
-                        <div class="stat-number" id="maxCapacityDisplay">0</div>
-                    </div>
-
-                    <div class="stat-card">
-                        <h3>Capacidad Disponible</h3>
-                        <div class="stat-number" id="availableCapacity">0</div>
-                    </div>
-
-                    <div class="stat-card">
-                        <h3>Ocupación</h3>
-                        <div class="stat-number" id="occupancyPercent">0%</div>
-                    </div>
-                </div>
-
-                <div class="progress-bar-container">
-                    <div class="progress-bar-fill" id="progressBar"></div>
-                </div>
-
-                <div id="accessesStatusContainer" class="accesses-status"></div>
-
-                <button class="btn btn-secondary" onclick="app.backToConfig()">← Volver a Configuración</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Cargar QRCode.js primero -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode.js/1.5.3/qrcode.min.js"></script>
-    <!-- Cargar la app después -->
-    <script src="app.js"></script>
-</body>
-</html>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Control de aforo evento v2</title>
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet" />
+  <style>
+    :root, [data-theme="light"] {
+      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2rem);
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      --radius-full: 9999px;
+      --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+      --color-bg: #f7f6f2;
+      --color-surface: #f9f8f5;
+      --color-surface-2: #fbfbf9;
+      --color-border: #d4d1ca;
+      --color-text: #28251d;
+      --color-text-muted: #696760;
+      --color-text-inverse: #f9f8f4;
+      --color-primary: #01696f;
+      --color-primary-hover: #0c4e54;
+      --color-primary-highlight: #d7e8e7;
+      --color-warning: #964219;
+      --color-error: #a13544;
+      --color-success: #437a22;
+      --shadow-sm: 0 1px 2px oklch(0.2 0.01 80 / 0.06);
+      --shadow-md: 0 8px 24px oklch(0.2 0.01 80 / 0.08);
+      --font-body: 'Satoshi', Inter, sans-serif;
+      --content: 1180px;
+    }
+    [data-theme="dark"] {
+      --color-bg: #171614;
+      --color-surface: #1c1b19;
+      --color-surface-2: #201f1d;
+      --color-border: #393836;
+      --color-text: #ece8e1;
+      --color-text-muted: #beb9b0;
+      --color-text-inverse: #1a1816;
+      --color-primary: #4f98a3;
+      --color-primary-hover: #69aeb8;
+      --color-primary-highlight: #243436;
+      --color-warning: #c07a4a;
+      --color-error: #dd6974;
+      --color-success: #84be63;
+      --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.22);
+      --shadow-md: 0 8px 24px oklch(0 0 0 / 0.3);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: 1.5;
+      background: var(--color-bg);
+      color: var(--color-text);
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; transition: all var(--transition); border: none; }
+    button:active { transform: translateY(1px) scale(0.99); }
+    
