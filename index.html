@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Control de aforo evento v2</title>
+  <title>Control de aforo v5 · Supabase</title>
   <link rel="preconnect" href="https://api.fontshare.com" />
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet" />
   <style>
@@ -12,70 +12,36 @@
       --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
       --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
       --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2rem);
-      --space-2: 0.5rem;
-      --space-3: 0.75rem;
-      --space-4: 1rem;
-      --space-6: 1.5rem;
-      --space-8: 2rem;
-      --radius-lg: 0.75rem;
-      --radius-xl: 1rem;
-      --radius-full: 9999px;
+      --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; --space-6: 1.5rem; --space-8: 2rem;
+      --radius-lg: 0.75rem; --radius-xl: 1rem; --radius-full: 9999px;
       --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
-      --color-bg: #f7f6f2;
-      --color-surface: #f9f8f5;
-      --color-surface-2: #fbfbf9;
-      --color-border: #d4d1ca;
-      --color-text: #28251d;
-      --color-text-muted: #696760;
-      --color-text-inverse: #f9f8f4;
-      --color-primary: #01696f;
-      --color-primary-hover: #0c4e54;
-      --color-primary-highlight: #d7e8e7;
-      --color-warning: #964219;
-      --color-error: #a13544;
-      --color-success: #437a22;
+      --color-bg: #f7f6f2; --color-surface: #f9f8f5; --color-surface-2: #fbfbf9;
+      --color-text: #28251d; --color-text-muted: #696760; --color-text-inverse: #f9f8f4;
+      --color-primary: #01696f; --color-primary-hover: #0c4e54; --color-primary-highlight: #d7e8e7;
+      --color-warning: #964219; --color-error: #a13544; --color-success: #437a22;
       --shadow-sm: 0 1px 2px oklch(0.2 0.01 80 / 0.06);
-      --shadow-md: 0 8px 24px oklch(0.2 0.01 80 / 0.08);
-      --font-body: 'Satoshi', Inter, sans-serif;
-      --content: 1180px;
+      --font-body: 'Satoshi', Inter, sans-serif; --content: 1180px;
     }
     [data-theme="dark"] {
-      --color-bg: #171614;
-      --color-surface: #1c1b19;
-      --color-surface-2: #201f1d;
-      --color-border: #393836;
-      --color-text: #ece8e1;
-      --color-text-muted: #beb9b0;
-      --color-text-inverse: #1a1816;
-      --color-primary: #4f98a3;
-      --color-primary-hover: #69aeb8;
-      --color-primary-highlight: #243436;
-      --color-warning: #c07a4a;
-      --color-error: #dd6974;
-      --color-success: #84be63;
+      --color-bg: #171614; --color-surface: #1c1b19; --color-surface-2: #201f1d;
+      --color-text: #ece8e1; --color-text-muted: #beb9b0; --color-text-inverse: #1a1816;
+      --color-primary: #4f98a3; --color-primary-hover: #69aeb8; --color-primary-highlight: #243436;
+      --color-warning: #c07a4a; --color-error: #dd6974; --color-success: #84be63;
       --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.22);
-      --shadow-md: 0 8px 24px oklch(0 0 0 / 0.3);
     }
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100dvh;
-      font-family: var(--font-body);
-      font-size: var(--text-base);
-      line-height: 1.5;
-      background: var(--color-bg);
-      color: var(--color-text);
-    }
-    button, input { font: inherit; }
+    body { margin: 0; min-height: 100dvh; font-family: var(--font-body); font-size: var(--text-base); line-height: 1.5; background: var(--color-bg); color: var(--color-text); }
+    button, input, textarea { font: inherit; }
     button { cursor: pointer; transition: all var(--transition); border: none; }
     button:active { transform: translateY(1px) scale(0.99); }
-    .topbar { position: sticky; top: 0; background: color-mix(in oklab, var(--color-bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid color-mix(in oklab, var(--color-text) 10%, transparent); }
+    .topbar { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(12px); background: color-mix(in oklab, var(--color-bg) 88%, transparent); border-bottom: 1px solid color-mix(in oklab, var(--color-text) 10%, transparent); }
     .wrap, .view { width: min(calc(100% - 2rem), var(--content)); margin: 0 auto; }
     .wrap { min-height: 4.5rem; display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); padding: .9rem 0; }
-    .brand { display: flex; align-items: center; gap: .75rem; }
-    .mark { width: 2.75rem; height: 2.75rem; border-radius: .9rem; display: grid; place-items: center; background: linear-gradient(135deg, var(--color-primary), color-mix(in oklab, var(--color-primary) 65%, var(--color-bg))); color: var(--color-text-inverse); }
+    .brand { display: flex; align-items: center; gap: .75rem; min-width: 0; }
+    .mark { width: 2.75rem; height: 2.75rem; border-radius: .9rem; display: grid; place-items: center; background: linear-gradient(135deg, var(--color-primary), color-mix(in oklab, var(--color-primary) 65%, var(--color-bg))); color: var(--color-text-inverse); flex: 0 0 auto; }
     .brand h1 { margin: 0; font-size: var(--text-lg); line-height: 1.1; }
     .brand p { margin: .15rem 0 0; color: var(--color-text-muted); font-size: var(--text-sm); }
+    .toolbar { display:flex; gap:.5rem; align-items:center; }
     .view { display: none; padding: 2rem 0 3rem; }
     .view.is-visible { display: block; }
     .grid { display: grid; gap: var(--space-6); }
@@ -84,16 +50,19 @@
     .panel, .card, .count-panel, .qr-card { background: linear-gradient(180deg, color-mix(in oklab, var(--color-surface-2) 84%, transparent), var(--color-surface)); border: 1px solid color-mix(in oklab, var(--color-text) 10%, transparent); border-radius: var(--radius-xl); box-shadow: var(--shadow-sm); }
     .panel, .card, .qr-card { padding: 1.35rem; }
     .count-panel { padding: clamp(1.25rem, 4vw, 2.5rem); }
-    .headline { font-size: var(--text-xl); line-height: 1.05; letter-spacing: -.03em; margin: .4rem 0 .8rem; max-width: 18ch; }
+    .headline { font-size: var(--text-xl); line-height: 1.05; letter-spacing: -.03em; margin: .4rem 0 .8rem; max-width: 20ch; }
     .eyebrow, .hint, .meta { color: var(--color-text-muted); font-size: var(--text-sm); }
-    .hint { margin: 0; }
-    .lede { margin: 0; color: var(--color-text-muted); max-width: 62ch; }
+    .lede, .hint, .meta { margin: 0; }
+    .lede { color: var(--color-text-muted); max-width: 62ch; }
     .divider { height: 1px; background: color-mix(in oklab, var(--color-text) 10%, transparent); margin: 1rem 0; }
     form, .field, .field-grid, .name-list, .live-list, .qr-grid, .summary { display: grid; gap: var(--space-4); }
     .field-grid, .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     label { font-weight: 700; }
-    input[type="text"], input[type="number"], input[type="url"] { width: 100%; min-height: 48px; padding: .85rem .95rem; border-radius: var(--radius-lg); border: 1px solid color-mix(in oklab, var(--color-text) 12%, transparent); background: var(--color-surface-2); color: var(--color-text); }
-    .name-list { padding: 1rem; border-radius: var(--radius-lg); background: color-mix(in oklab, var(--color-primary) 5%, var(--color-surface)); border: 1px solid color-mix(in oklab, var(--color-text) 10%, transparent); }
+    input[type="text"], input[type="number"], input[type="password"], input[type="url"], textarea { width: 100%; min-height: 48px; padding: .85rem .95rem; border-radius: var(--radius-lg); border: 1px solid color-mix(in oklab, var(--color-text) 12%, transparent); background: var(--color-surface-2); color: var(--color-text); }
+    textarea { min-height: 210px; resize: vertical; }
+    .name-list, .notice, .code-card { padding: 1rem; border-radius: var(--radius-lg); }
+    .name-list, .code-card { background: color-mix(in oklab, var(--color-primary) 5%, var(--color-surface)); border: 1px solid color-mix(in oklab, var(--color-text) 10%, transparent); }
+    .notice { background: color-mix(in oklab, var(--color-warning) 12%, var(--color-surface)); border: 1px solid color-mix(in oklab, var(--color-warning) 20%, transparent); color: var(--color-warning); }
     .btn, .icon { min-height: 44px; min-width: 44px; border-radius: var(--radius-lg); }
     .btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; padding: .75rem 1rem; font-weight: 700; }
     .btn-primary { background: var(--color-primary); color: var(--color-text-inverse); }
@@ -114,7 +83,8 @@
     .qr-box { background: white; border-radius: var(--radius-lg); min-height: 180px; padding: .75rem; display: grid; place-items: center; overflow: hidden; }
     .qr-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
     .link-preview { display: block; margin-top: .75rem; padding: .7rem .8rem; border-radius: var(--radius-lg); background: color-mix(in oklab, var(--color-text) 4%, transparent); color: var(--color-text-muted); font-size: .78rem; word-break: break-all; }
-    .notice { padding: 1rem; border-radius: var(--radius-lg); background: color-mix(in oklab, var(--color-warning) 12%, var(--color-surface)); border: 1px solid color-mix(in oklab, var(--color-warning) 20%, transparent); color: var(--color-warning); }
+    .status-text { min-height: 1.5rem; font-size: var(--text-sm); color: var(--color-text-muted); }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .86rem; }
     .count-wrap { display: grid; gap: 1.25rem; justify-items: center; text-align: center; }
     .count-wrap h2 { font-size: clamp(1.8rem, 3.8vw, 3rem); line-height: 1; letter-spacing: -.04em; margin: 0; }
     .big-number, .total-number { font-size: clamp(4rem, 16vw, 8rem); line-height: .9; letter-spacing: -.08em; font-weight: 900; font-variant-numeric: tabular-nums; }
@@ -126,6 +96,7 @@
     .bar { height: 100%; width: 0; background: linear-gradient(90deg, var(--color-success), var(--color-primary)); transition: width 220ms ease; }
     .bar.warning { background: linear-gradient(90deg, var(--color-warning), var(--color-primary)); }
     .bar.error { background: linear-gradient(90deg, var(--color-warning), var(--color-error)); }
+    .footer-note { color: var(--color-text-muted); font-size: var(--text-sm); text-align: center; padding: 1rem 0 0; }
     @media (max-width: 920px) { .hero, .admin, .field-grid, .summary { grid-template-columns: 1fr; } }
     @media (max-width: 640px) { .wrap { flex-direction: column; align-items: flex-start; } }
   </style>
@@ -138,11 +109,11 @@
           <svg viewBox="0 0 48 48" width="28" height="28" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="10" width="34" height="28" rx="9"></rect><path d="M16 20h16M24 20v18"></path><path d="M13 14h22"></path></svg>
         </div>
         <div>
-          <h1 id="appTitle">Control de aforo</h1>
-          <p id="appSubtitle">Genera QR funcionales con URL pública</p>
+          <h1 id="appTitle">Control de aforo · v5</h1>
+          <p id="appSubtitle">Versión simple con Supabase</p>
         </div>
       </div>
-      <div style="display:flex; gap:.5rem; align-items:center; width:min-content;">
+      <div class="toolbar">
         <button type="button" class="btn btn-secondary" id="homeButton">Inicio</button>
         <button type="button" class="icon" id="themeToggle" aria-label="Cambiar tema">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
@@ -155,22 +126,75 @@
     <section id="configView" class="view is-visible">
       <div class="grid hero">
         <article class="panel">
-          <p class="eyebrow">Configuración y publicación</p>
-          <h2 class="headline">Los QR solo funcionan si apuntan a una URL pública accesible.</h2>
-          <p class="lede">Esta versión añade un campo de URL pública base para que el QR abra una página real desde cualquier móvil. Puedes pegar ahí la URL donde alojes el HTML, por ejemplo en Netlify, GitHub Pages o tu propio dominio.</p>
+          <p class="eyebrow">Configuración guiada</p>
+          <h2 class="headline">La versión más simple con Supabase y polling.</h2>
+          <p class="lede">Solo necesitas crear una tabla en Supabase, pegar la URL del proyecto y la publishable key, y luego la app crea el evento, genera los QR y actualiza el panel cada 1,5 segundos.</p>
           <div class="divider"></div>
-          <div class="notice">Si el archivo se abre solo como archivo local o desde un enlace no público, el QR puede generarse, pero no llevará a una página accesible desde otro dispositivo.</div>
+          <div class="notice"><strong>Paso 1.</strong> En Supabase crea un proyecto y abre el SQL Editor.</div>
+          <div class="notice"><strong>Paso 2.</strong> Pega el SQL de abajo y ejecútalo una sola vez.</div>
+          <div class="notice"><strong>Paso 3.</strong> Copia la <span class="mono">Project URL</span> y la <span class="mono">Publishable/anon key</span>, pégalas abajo y genera el evento.</div>
+          <div class="divider"></div>
+          <div class="code-card">
+            <label for="sqlSetup">SQL para Supabase</label>
+            <textarea id="sqlSetup" readonly class="mono">create table if not exists public.aforo_accesses (
+  id bigint generated by default as identity primary key,
+  event_id text not null,
+  access_id text not null,
+  access_name text not null,
+  event_title text not null,
+  max_capacity integer not null,
+  count integer not null default 0,
+  updated_at timestamptz not null default now()
+);
+
+create unique index if not exists aforo_accesses_event_access_idx
+on public.aforo_accesses (event_id, access_id);
+
+alter table public.aforo_accesses enable row level security;
+
+grant usage on schema public to anon;
+grant select, insert, update on public.aforo_accesses to anon;
+grant usage, select on sequence public.aforo_accesses_id_seq to anon;
+
+drop policy if exists "aforo public select" on public.aforo_accesses;
+drop policy if exists "aforo public insert" on public.aforo_accesses;
+drop policy if exists "aforo public update" on public.aforo_accesses;
+
+create policy "aforo public select"
+on public.aforo_accesses
+for select
+using (true);
+
+create policy "aforo public insert"
+on public.aforo_accesses
+for insert
+with check (true);
+
+create policy "aforo public update"
+on public.aforo_accesses
+for update
+using (true)
+with check (true);</textarea>
+            <div class="qr-actions">
+              <button type="button" class="btn btn-secondary" id="copySqlButton">Copiar SQL</button>
+            </div>
+          </div>
         </article>
+
         <section class="card">
           <form id="configForm">
             <div class="field">
-              <label for="publicBaseUrl">URL pública base de la app</label>
-              <input id="publicBaseUrl" type="url" placeholder="https://tu-dominio.com/control-aforo-evento-v2.html" />
-              <p class="hint">Debe ser la dirección pública exacta donde está publicado este archivo HTML.</p>
+              <label for="supabaseUrl">Project URL de Supabase</label>
+              <input id="supabaseUrl" type="url" placeholder="https://xxxx.supabase.co" required />
+            </div>
+            <div class="field">
+              <label for="supabaseKey">Publishable key / anon key</label>
+              <input id="supabaseKey" type="password" placeholder="Pega aquí la clave pública" required />
+              <p class="hint">No uses la service role key en esta app.</p>
             </div>
             <div class="field">
               <label for="eventTitle">Título del evento</label>
-              <input id="eventTitle" type="text" maxlength="80" placeholder="Ejemplo: Fiesta Mayor 2026" required />
+              <input id="eventTitle" type="text" maxlength="80" placeholder="Ejemplo: Festa Major 2026" required />
             </div>
             <div class="field-grid">
               <div class="field">
@@ -185,9 +209,9 @@
             <div class="field">
               <label>Nombres de los accesos</label>
               <div id="accessNameList" class="name-list"></div>
-              <p class="hint">Se generará un QR por cada acceso y uno adicional para ver el total.</p>
             </div>
-            <button type="submit" class="btn btn-primary">Generar QR y abrir panel</button>
+            <div class="status-text" id="setupStatus"></div>
+            <button type="submit" class="btn btn-primary" id="createEventButton">Crear evento y generar QR</button>
           </form>
         </section>
       </div>
@@ -198,7 +222,7 @@
         <article class="count-panel">
           <div class="chip-row" id="eventChips"></div>
           <h2 class="headline" style="max-width:none">Panel del evento</h2>
-          <p class="lede">Comparte los QR y supervisa desde aquí el recuento total.</p>
+          <p class="lede">El panel relee Supabase cada 1,5 segundos y suma todos los accesos del evento.</p>
           <div class="divider"></div>
           <div class="summary">
             <div class="stat"><span class="meta">Personas dentro</span><strong id="adminTotal">0</strong></div>
@@ -207,14 +231,14 @@
           <div class="divider"></div>
           <div class="chip-row">
             <span class="chip success" id="occupancyStatus">Espacio disponible</span>
-            <span class="chip success" id="syncStatus">Sincronización en directo</span>
+            <span class="chip" id="syncStatus">Sincronizando…</span>
           </div>
           <div class="divider"></div>
           <button type="button" class="btn btn-danger" id="resetButton">Reiniciar conteos</button>
         </article>
         <aside class="card">
-          <h3 style="margin:0">Lectura en tiempo real</h3>
-          <p class="hint">El total se calcula sumando el recuento neto de todos los accesos.</p>
+          <h3 style="margin:0">Lectura en vivo</h3>
+          <p class="hint">Cada acceso vive en una fila separada.</p>
           <div class="divider"></div>
           <ul id="liveAccessList" class="live-list"></ul>
         </aside>
@@ -223,7 +247,7 @@
       <section class="grid">
         <div>
           <h3 style="margin:0 0 .5rem">QR generados</h3>
-          <p class="hint">Cada QR contiene la URL pública base con los parámetros del acceso.</p>
+          <p class="hint">Comparte cada QR con el controlador correspondiente y usa el QR total para la pantalla general.</p>
         </div>
         <div id="qrGrid" class="qr-grid"></div>
       </section>
@@ -261,50 +285,40 @@
         <ul id="totalAccessBreakdown" class="live-list"></ul>
       </section>
     </section>
+
+    <p class="footer-note">Publica este archivo como <span class="mono">index.html</span> en GitHub Pages y genera los QR desde la URL pública.</p>
   </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const state = { config: null, logs: {}, counts: {}, total: 0, theme: matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light' };
+    const TABLE = 'aforo_accesses';
+    const POLL_MS = 1500;
+
+    const state = { config: null, rows: [], total: 0, timer: null, theme: matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light', busy: false };
     const dom = {
       views: { config: document.getElementById('configView'), admin: document.getElementById('adminView'), access: document.getElementById('accessView'), total: document.getElementById('totalView') },
       appTitle: document.getElementById('appTitle'), appSubtitle: document.getElementById('appSubtitle'), homeButton: document.getElementById('homeButton'), themeToggle: document.getElementById('themeToggle'),
-      configForm: document.getElementById('configForm'), publicBaseUrl: document.getElementById('publicBaseUrl'), eventTitle: document.getElementById('eventTitle'), maxCapacity: document.getElementById('maxCapacity'), accessCount: document.getElementById('accessCount'), accessNameList: document.getElementById('accessNameList'),
+      sqlSetup: document.getElementById('sqlSetup'), copySqlButton: document.getElementById('copySqlButton'),
+      configForm: document.getElementById('configForm'), supabaseUrl: document.getElementById('supabaseUrl'), supabaseKey: document.getElementById('supabaseKey'), eventTitle: document.getElementById('eventTitle'), maxCapacity: document.getElementById('maxCapacity'), accessCount: document.getElementById('accessCount'), accessNameList: document.getElementById('accessNameList'), setupStatus: document.getElementById('setupStatus'), createEventButton: document.getElementById('createEventButton'),
       eventChips: document.getElementById('eventChips'), adminTotal: document.getElementById('adminTotal'), adminMax: document.getElementById('adminMax'), occupancyStatus: document.getElementById('occupancyStatus'), syncStatus: document.getElementById('syncStatus'), liveAccessList: document.getElementById('liveAccessList'), qrGrid: document.getElementById('qrGrid'), resetButton: document.getElementById('resetButton'),
       accessChipRow: document.getElementById('accessChipRow'), accessEventName: document.getElementById('accessEventName'), accessHeading: document.getElementById('accessHeading'), accessCountValue: document.getElementById('accessCountValue'), accessCapacityBar: document.getElementById('accessCapacityBar'), accessCapacityText: document.getElementById('accessCapacityText'), plusButton: document.getElementById('plusButton'), minusButton: document.getElementById('minusButton'),
       totalChipRow: document.getElementById('totalChipRow'), totalEventName: document.getElementById('totalEventName'), totalCountValue: document.getElementById('totalCountValue'), totalCapacityBar: document.getElementById('totalCapacityBar'), totalCapacityText: document.getElementById('totalCapacityText'), totalAccessBreakdown: document.getElementById('totalAccessBreakdown')
     };
-    const gun = window.Gun(['https://peer.wallie.io/gun', 'https://gun-manhattan.herokuapp.com/gun', 'https://gunjs.herokuapp.com/gun']);
-    let syncTimer = null;
-    let logsNode = null;
 
-    function setTheme(theme) {
-      state.theme = theme;
-      document.documentElement.setAttribute('data-theme', theme);
-    }
-    function updateSyncChip() {
-      dom.syncStatus.textContent = navigator.onLine ? 'Sincronización en directo' : 'Sin conexión';
-      dom.syncStatus.className = navigator.onLine ? 'chip success' : 'chip error';
-    }
-    function slugify(text) { return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').slice(0, 32) || 'acceso'; }
-    function encodeConfig(config) { return btoa(unescape(encodeURIComponent(JSON.stringify(config)))); }
-    function decodeConfig(v) { try { return JSON.parse(decodeURIComponent(escape(atob(v)))); } catch { return null; } }
+    function setTheme(theme) { state.theme = theme; document.documentElement.setAttribute('data-theme', theme); }
     function formatNumber(v) { return new Intl.NumberFormat('es-ES').format(v || 0); }
-    function getConfigFromUrl() { const raw = new URLSearchParams(location.search).get('cfg'); return raw ? decodeConfig(raw) : null; }
-    function getRoute() { const h = location.hash.replace('#', '') || 'config'; if (h.startsWith('access:')) return { type: 'access', accessId: h.split(':')[1] }; if (h === 'total') return { type: 'total' }; if (h === 'admin') return { type: 'admin' }; return { type: 'config' }; }
-    function normalizeBaseUrl(url) { return String(url || '').trim().replace(/#.*$/, '').replace(/\?.*$/, ''); }
-    function effectiveBaseUrl(config) {
-      const explicit = normalizeBaseUrl(config?.publicBaseUrl || '');
-      if (explicit) return explicit;
-      if (/^https?:$/i.test(location.protocol)) return location.origin + location.pathname;
-      return '';
-    }
-    function buildUrl(config, route) {
-      const base = effectiveBaseUrl(config);
-      if (!base) return '';
-      return base + '?cfg=' + encodeURIComponent(encodeConfig(config)) + '#' + route;
-    }
+    function slugify(text) { return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').slice(0, 32) || 'acceso'; }
+    function encodeCfg(obj) { return btoa(unescape(encodeURIComponent(JSON.stringify(obj)))); }
+    function decodeCfg(raw) { try { return JSON.parse(decodeURIComponent(escape(atob(raw)))); } catch { return null; } }
+    function getCfgFromUrl() { const raw = new URLSearchParams(location.search).get('cfg'); return raw ? decodeCfg(raw) : null; }
+    function appBaseUrl() { return location.origin + location.pathname; }
+    function buildUrl(cfg, hash) { return appBaseUrl() + '?cfg=' + encodeURIComponent(encodeCfg(cfg)) + '#' + hash; }
+    function getHashMode() { return (location.hash || '#config').replace('#', ''); }
+    function showView(name) { Object.entries(dom.views).forEach(([key, el]) => el.classList.toggle('is-visible', key === name)); }
+    function setSetupStatus(text, tone = 'neutral') { dom.setupStatus.textContent = text; dom.setupStatus.style.color = tone === 'error' ? 'var(--color-error)' : tone === 'success' ? 'var(--color-success)' : 'var(--color-text-muted)'; }
+    function updateSyncChip(ok = true, text = '') { dom.syncStatus.textContent = text || (ok ? 'Sincronización activa' : 'Error de sincronización'); dom.syncStatus.className = 'chip ' + (ok ? 'success' : 'error'); }
+
     function renderAccessNameFields(amount, names = []) {
       dom.accessNameList.innerHTML = '';
       for (let i = 0; i < amount; i += 1) {
@@ -314,166 +328,199 @@
         dom.accessNameList.appendChild(div);
       }
     }
-    function createConfigFromForm() {
-      const accessTotal = Number(dom.accessCount.value);
-      const inputs = [...dom.accessNameList.querySelectorAll('input')];
-      return {
-        version: 2,
-        eventId: 'evt-' + Math.random().toString(36).slice(2, 9),
-        publicBaseUrl: normalizeBaseUrl(dom.publicBaseUrl.value),
+
+    function createClient(url, key) { return window.supabase.createClient(url, key); }
+    function occupancyState() { if (!state.config) return 'success'; if (state.total > state.config.maxCapacity) return 'error'; if (state.total >= Math.round(state.config.maxCapacity * 0.85)) return 'warning'; return 'success'; }
+    function occupancyLabel() { if (!state.config) return 'Espacio disponible'; if (state.total > state.config.maxCapacity) return 'Aforo superado'; if (state.total >= Math.round(state.config.maxCapacity * 0.85)) return 'Aforo casi completo'; return 'Espacio disponible'; }
+    function updateBar(el, value) { const ratio = state.config ? Math.max(0, Math.min((value / state.config.maxCapacity) * 100, 100)) : 0; el.style.width = ratio + '%'; el.classList.remove('warning', 'error'); const status = occupancyState(); if (status !== 'success') el.classList.add(status); }
+
+    async function fetchRows() {
+      const client = createClient(state.config.supabaseUrl, state.config.supabaseKey);
+      const { data, error } = await client.from(TABLE).select('event_id,access_id,access_name,event_title,max_capacity,count,updated_at').eq('event_id', state.config.eventId).order('access_name');
+      if (error) throw error;
+      state.rows = data || [];
+      state.total = state.rows.reduce((sum, row) => sum + Number(row.count || 0), 0);
+      updateSyncChip(true, 'Sincronización activa');
+      renderCurrentRoute();
+    }
+
+    async function createEventFromForm() {
+      const count = Math.max(1, Math.min(12, Number(dom.accessCount.value) || 1));
+      const inputs = [...dom.accessNameList.querySelectorAll('input')].slice(0, count);
+      const eventId = 'evt-' + Math.random().toString(36).slice(2, 10);
+      const cfg = {
+        version: 5,
+        mode: 'admin',
+        supabaseUrl: dom.supabaseUrl.value.trim().replace(/\/$/, ''),
+        supabaseKey: dom.supabaseKey.value.trim(),
         title: dom.eventTitle.value.trim(),
         maxCapacity: Number(dom.maxCapacity.value),
-        accesses: inputs.slice(0, accessTotal).map((input, i) => ({ id: 'a' + (i + 1) + '-' + slugify(input.value.trim()), name: input.value.trim() || 'Acceso ' + (i + 1) })),
-        createdAt: Date.now()
+        eventId,
+        accessItems: inputs.map((input, i) => ({ access_id: 'a' + (i + 1) + '-' + slugify(input.value.trim()), access_name: input.value.trim() || 'Acceso ' + (i + 1) }))
       };
+      const client = createClient(cfg.supabaseUrl, cfg.supabaseKey);
+      const rows = cfg.accessItems.map((a) => ({ event_id: cfg.eventId, access_id: a.access_id, access_name: a.access_name, event_title: cfg.title, max_capacity: cfg.maxCapacity, count: 0, updated_at: new Date().toISOString() }));
+      const { error } = await client.from(TABLE).upsert(rows, { onConflict: 'event_id,access_id' }).select();
+      if (error) throw error;
+      return cfg;
     }
-    function showView(name) { Object.entries(dom.views).forEach(([k, el]) => el.classList.toggle('is-visible', k === name)); }
-    function setUrlForRoute(config, route) {
-      const ownBase = location.origin + location.pathname;
-      history.replaceState({}, '', ownBase + '?cfg=' + encodeURIComponent(encodeConfig(config)) + '#' + route);
-    }
-    function pullLogsAndRefresh() {
-      if (!logsNode || !state.config) return;
-      logsNode.map().once((entry) => {
-        if (!entry || !entry.id) return;
-        state.logs[entry.id] = entry;
-        recomputeCounts();
-        renderCurrentRoute();
-      });
-    }
-    function connectEvent(config) {
-      state.config = config;
-      state.logs = {};
-      state.counts = Object.fromEntries(config.accesses.map(a => [a.id, 0]));
-      state.total = 0;
-      dom.appTitle.textContent = config.title;
-      dom.appSubtitle.textContent = 'Evento en curso · ' + config.accesses.length + ' accesos';
-      const eventNode = gun.get('public-event-capacity').get(config.eventId);
-      logsNode = eventNode.get('logs');
-      eventNode.get('meta').put({ title: config.title, maxCapacity: config.maxCapacity, publicBaseUrl: config.publicBaseUrl, updatedAt: Date.now() });
-      logsNode.map().on((entry) => { if (!entry || !entry.id) return; state.logs[entry.id] = entry; recomputeCounts(); renderCurrentRoute(); });
-      if (syncTimer) clearInterval(syncTimer);
-      syncTimer = setInterval(pullLogsAndRefresh, 1500);
-      pullLogsAndRefresh();
-      renderCurrentRoute();
-    }
-    function recomputeCounts() {
-      const events = Object.values(state.logs).filter(x => x && typeof x.ts === 'number').sort((a, b) => a.ts - b.ts);
-      const counts = Object.fromEntries(state.config.accesses.map(a => [a.id, 0]));
-      for (const item of events) {
-        if (item.kind === 'reset') { Object.keys(counts).forEach(k => counts[k] = 0); continue; }
-        if (item.kind === 'delta' && counts[item.accessId] !== undefined) counts[item.accessId] = Math.max(0, counts[item.accessId] + Number(item.delta || 0));
+
+    async function updateSingleAccess(delta) {
+      if (state.busy || !state.config?.access) return;
+      state.busy = true; dom.plusButton.disabled = true; dom.minusButton.disabled = true;
+      try {
+        const client = createClient(state.config.supabaseUrl, state.config.supabaseKey);
+        const { data, error } = await client.from(TABLE).select('count').eq('event_id', state.config.eventId).eq('access_id', state.config.access.access_id).single();
+        if (error) throw error;
+        const next = Math.max(0, Number(data.count || 0) + delta);
+        const { error: updateError } = await client.from(TABLE).update({ count: next, updated_at: new Date().toISOString() }).eq('event_id', state.config.eventId).eq('access_id', state.config.access.access_id).select();
+        if (updateError) throw updateError;
+        state.rows = [{ access_id: state.config.access.access_id, access_name: state.config.access.access_name, count: next }];
+        state.total = next;
+        renderAccess();
+      } catch (error) {
+        alert('No se pudo actualizar el contador. Revisa la configuración de Supabase.');
+      } finally {
+        state.busy = false; dom.plusButton.disabled = false; dom.minusButton.disabled = false;
+        setTimeout(() => pollCurrentMode().catch(() => {}), 250);
       }
-      state.counts = counts;
-      state.total = Object.values(counts).reduce((a, b) => a + b, 0);
     }
-    function addLog(kind, payload = {}) {
-      if (!logsNode) return;
-      const id = crypto.randomUUID ? crypto.randomUUID() : 'log-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
-      const entry = { id, kind, ts: Date.now(), ...payload };
-      state.logs[id] = entry;
-      recomputeCounts();
-      renderCurrentRoute();
-      logsNode.get(id).put(entry);
-      setTimeout(pullLogsAndRefresh, 250);
+
+    async function resetAllCounts() {
+      if (!confirm('¿Quieres reiniciar todos los conteos del evento?')) return;
+      try {
+        const client = createClient(state.config.supabaseUrl, state.config.supabaseKey);
+        const { error } = await client.from(TABLE).update({ count: 0, updated_at: new Date().toISOString() }).eq('event_id', state.config.eventId).select();
+        if (error) throw error;
+        await fetchRows();
+      } catch (error) {
+        updateSyncChip(false, 'No se pudo reiniciar');
+        alert('No se pudieron reiniciar los conteos.');
+      }
     }
-    function occupancyState() { if (state.total > state.config.maxCapacity) return 'error'; if (state.total >= Math.round(state.config.maxCapacity * 0.85)) return 'warning'; return 'success'; }
-    function occupancyLabel() { if (state.total > state.config.maxCapacity) return 'Aforo superado'; if (state.total >= Math.round(state.config.maxCapacity * 0.85)) return 'Aforo casi completo'; return 'Espacio disponible'; }
-    function progress(value) { return Math.max(0, Math.min((value / state.config.maxCapacity) * 100, 100)); }
-    function updateBar(el, value) { const st = occupancyState(); el.style.width = progress(value) + '%'; el.classList.remove('warning', 'error'); if (st !== 'success') el.classList.add(st); }
+
     function renderAdmin() {
       dom.eventChips.innerHTML = '';
-      [['chip', 'ID ' + state.config.eventId], ['chip', state.config.accesses.length + ' accesos'], ['chip', 'Máximo ' + formatNumber(state.config.maxCapacity)]].forEach(([cls, txt]) => { const s = document.createElement('span'); s.className = cls; s.textContent = txt; dom.eventChips.appendChild(s); });
+      [['chip', 'ID ' + state.config.eventId], ['chip', state.rows.length + ' accesos'], ['chip', 'Máximo ' + formatNumber(state.config.maxCapacity)]].forEach(([cls, txt]) => { const chip = document.createElement('span'); chip.className = cls; chip.textContent = txt; dom.eventChips.appendChild(chip); });
       dom.adminTotal.textContent = formatNumber(state.total);
       dom.adminMax.textContent = formatNumber(state.config.maxCapacity);
       dom.occupancyStatus.textContent = occupancyLabel();
       dom.occupancyStatus.className = 'chip ' + occupancyState();
       dom.liveAccessList.innerHTML = '';
-      state.config.accesses.forEach(a => { const li = document.createElement('li'); li.className = 'live-item'; li.innerHTML = `<span>${a.name}</span><strong>${formatNumber(state.counts[a.id] || 0)}</strong>`; dom.liveAccessList.appendChild(li); });
+      state.rows.forEach((row) => { const li = document.createElement('li'); li.className = 'live-item'; li.innerHTML = `<span>${row.access_name}</span><strong>${formatNumber(row.count || 0)}</strong>`; dom.liveAccessList.appendChild(li); });
       dom.qrGrid.innerHTML = '';
-      const entries = [...state.config.accesses.map(a => ({ title: a.name, description: 'Vista del controlador de acceso', url: buildUrl(state.config, 'access:' + a.id) })), { title: 'Total del evento', description: 'Pantalla de lectura global del aforo', url: buildUrl(state.config, 'total') }];
-      entries.forEach(entry => {
-        const card = document.createElement('article');
-        card.className = 'qr-card';
-        const qrId = 'qr-' + Math.random().toString(36).slice(2, 9);
-        const hasUrl = !!entry.url;
-        card.innerHTML = `
-          <div class="chip-row"><span class="chip ${hasUrl ? 'success' : 'error'}">${hasUrl ? 'QR listo' : 'Falta URL pública'}</span></div>
-          <h3 style="margin:.85rem 0 0">${entry.title}</h3>
-          <p class="hint" style="margin-top:.45rem">${entry.description}</p>
-          <div class="qr-box" id="${qrId}">${hasUrl ? '' : '<p style="color:#333; text-align:center; padding:1rem; font-size:.95rem;">Introduce una URL pública base y vuelve a generar los QR.</p>'}</div>
-          <div class="qr-actions">
-            <button type="button" class="btn btn-secondary" data-action="copy" ${hasUrl ? '' : 'disabled'}>Copiar enlace</button>
-            <button type="button" class="btn btn-primary" data-action="share" ${hasUrl ? '' : 'disabled'}>Compartir</button>
-          </div>
-          <small class="link-preview">${entry.url || 'Sin URL pública configurada'}</small>`;
+      const totalCfg = { version: 5, mode: 'total', supabaseUrl: state.config.supabaseUrl, supabaseKey: state.config.supabaseKey, title: state.config.title, maxCapacity: state.config.maxCapacity, eventId: state.config.eventId };
+      const entries = [
+        ...state.rows.map((row) => ({ title: row.access_name, description: 'Vista del controlador de acceso', url: buildUrl({ version: 5, mode: 'access', supabaseUrl: state.config.supabaseUrl, supabaseKey: state.config.supabaseKey, title: state.config.title, maxCapacity: state.config.maxCapacity, eventId: state.config.eventId, access: { access_id: row.access_id, access_name: row.access_name } }, 'access') })),
+        { title: 'Total del evento', description: 'Pantalla global de aforo', url: buildUrl(totalCfg, 'total') }
+      ];
+      entries.forEach((entry) => {
+        const card = document.createElement('article'); card.className = 'qr-card'; const qrId = 'qr-' + Math.random().toString(36).slice(2, 9);
+        card.innerHTML = `<div class="chip-row"><span class="chip success">QR listo</span></div><h3 style="margin:.85rem 0 0">${entry.title}</h3><p class="hint" style="margin-top:.45rem">${entry.description}</p><div class="qr-box" id="${qrId}"></div><div class="qr-actions"><button type="button" class="btn btn-secondary" data-action="copy">Copiar enlace</button><button type="button" class="btn btn-primary" data-action="share">Compartir</button></div><small class="link-preview">${entry.url}</small>`;
         dom.qrGrid.appendChild(card);
-        if (hasUrl) {
-          new QRCode(document.getElementById(qrId), { text: entry.url, width: 172, height: 172, colorDark: '#111111', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
-          card.querySelector('[data-action="copy"]').addEventListener('click', async () => {
-            try { await navigator.clipboard.writeText(entry.url); alert('Enlace copiado'); } catch { prompt('Copia este enlace', entry.url); }
-          });
-          card.querySelector('[data-action="share"]').addEventListener('click', async () => {
-            if (navigator.share) { try { await navigator.share({ title: entry.title, text: entry.description, url: entry.url }); return; } catch {} }
-            try { await navigator.clipboard.writeText(entry.url); alert('Enlace copiado para compartir'); } catch { prompt('Comparte este enlace', entry.url); }
-          });
-        }
+        new QRCode(document.getElementById(qrId), { text: entry.url, width: 172, height: 172, colorDark: '#111111', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
+        card.querySelector('[data-action="copy"]').addEventListener('click', async () => { try { await navigator.clipboard.writeText(entry.url); alert('Enlace copiado'); } catch { prompt('Copia este enlace', entry.url); } });
+        card.querySelector('[data-action="share"]').addEventListener('click', async () => { if (navigator.share) { try { await navigator.share({ title: entry.title, text: entry.description, url: entry.url }); return; } catch {} } try { await navigator.clipboard.writeText(entry.url); alert('Enlace copiado para compartir'); } catch { prompt('Comparte este enlace', entry.url); } });
       });
     }
-    function renderAccess(accessId) {
-      const access = state.config.accesses.find(a => a.id === accessId) || state.config.accesses[0];
-      const value = state.counts[access.id] || 0;
+
+    function renderAccess() {
+      const access = state.config.access;
+      const row = state.rows.find(r => r.access_id === access.access_id) || { count: state.total, access_name: access.access_name };
       dom.accessChipRow.innerHTML = '';
-      [['chip', 'Control de acceso'], ['chip ' + occupancyState(), occupancyLabel()]].forEach(([cls, txt]) => { const s = document.createElement('span'); s.className = cls; s.textContent = txt; dom.accessChipRow.appendChild(s); });
+      [['chip', 'Control de acceso'], ['chip', access.access_name]].forEach(([cls, txt]) => { const chip = document.createElement('span'); chip.className = cls; chip.textContent = txt; dom.accessChipRow.appendChild(chip); });
       dom.accessEventName.textContent = state.config.title;
-      dom.accessHeading.textContent = access.name;
-      dom.accessCountValue.textContent = formatNumber(value);
-      dom.accessCapacityText.textContent = formatNumber(state.total) + ' dentro · máximo ' + formatNumber(state.config.maxCapacity);
-      updateBar(dom.accessCapacityBar, state.total);
-      dom.minusButton.onclick = () => addLog('delta', { accessId: access.id, delta: -1 });
-      dom.plusButton.onclick = () => addLog('delta', { accessId: access.id, delta: 1 });
+      dom.accessHeading.textContent = access.access_name;
+      dom.accessCountValue.textContent = formatNumber(row.count || 0);
+      dom.accessCapacityText.textContent = 'Recuento actual del acceso';
+      updateBar(dom.accessCapacityBar, Number(row.count || 0));
     }
+
     function renderTotal() {
       dom.totalChipRow.innerHTML = '';
-      [['chip', 'Vista global'], ['chip ' + occupancyState(), occupancyLabel()]].forEach(([cls, txt]) => { const s = document.createElement('span'); s.className = cls; s.textContent = txt; dom.totalChipRow.appendChild(s); });
+      [['chip', 'Vista global'], ['chip ' + occupancyState(), occupancyLabel()]].forEach(([cls, txt]) => { const chip = document.createElement('span'); chip.className = cls; chip.textContent = txt; dom.totalChipRow.appendChild(chip); });
       dom.totalEventName.textContent = state.config.title;
       dom.totalCountValue.textContent = formatNumber(state.total);
       dom.totalCapacityText.textContent = formatNumber(state.total) + ' de ' + formatNumber(state.config.maxCapacity) + ' personas';
       updateBar(dom.totalCapacityBar, state.total);
       dom.totalAccessBreakdown.innerHTML = '';
-      state.config.accesses.forEach(a => { const li = document.createElement('li'); li.className = 'live-item'; li.innerHTML = `<span>${a.name}</span><strong>${formatNumber(state.counts[a.id] || 0)}</strong>`; dom.totalAccessBreakdown.appendChild(li); });
+      state.rows.forEach((row) => { const li = document.createElement('li'); li.className = 'live-item'; li.innerHTML = `<span>${row.access_name}</span><strong>${formatNumber(row.count || 0)}</strong>`; dom.totalAccessBreakdown.appendChild(li); });
     }
+
     function renderCurrentRoute() {
       if (!state.config) { showView('config'); return; }
-      const route = getRoute();
-      if (route.type === 'access') { showView('access'); renderAccess(route.accessId); return; }
-      if (route.type === 'total') { showView('total'); renderTotal(); return; }
+      const mode = getHashMode();
+      if (mode === 'access') { showView('access'); renderAccess(); return; }
+      if (mode === 'total') { showView('total'); renderTotal(); return; }
       showView('admin'); renderAdmin();
     }
-    dom.accessCount.addEventListener('input', () => {
-      const amount = Math.max(1, Math.min(12, Number(dom.accessCount.value) || 1));
-      const names = [...dom.accessNameList.querySelectorAll('input')].map(i => i.value);
-      renderAccessNameFields(amount, names);
+
+    async function pollCurrentMode() {
+      const mode = getHashMode();
+      const client = createClient(state.config.supabaseUrl, state.config.supabaseKey);
+      if (mode === 'access') {
+        const { data, error } = await client.from(TABLE).select('access_id,access_name,count').eq('event_id', state.config.eventId).eq('access_id', state.config.access.access_id).single();
+        if (error) throw error;
+        state.rows = [data];
+        state.total = Number(data.count || 0);
+        renderAccess();
+        return;
+      }
+      await fetchRows();
+    }
+
+    function startPolling() {
+      if (state.timer) clearInterval(state.timer);
+      if (!state.config) return;
+      const tick = async () => { try { await pollCurrentMode(); } catch (error) { updateSyncChip(false, 'Error de sincronización'); } };
+      tick();
+      state.timer = setInterval(tick, POLL_MS);
+    }
+    function stopPolling() { if (state.timer) clearInterval(state.timer); state.timer = null; }
+
+    dom.copySqlButton.addEventListener('click', async () => { try { await navigator.clipboard.writeText(dom.sqlSetup.value); alert('SQL copiado'); } catch { dom.sqlSetup.select(); document.execCommand('copy'); } });
+    dom.accessCount.addEventListener('input', () => { const amount = Math.max(1, Math.min(12, Number(dom.accessCount.value) || 1)); const names = [...dom.accessNameList.querySelectorAll('input')].map(i => i.value); renderAccessNameFields(amount, names); });
+    dom.configForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (state.busy) return;
+      state.busy = true; dom.createEventButton.disabled = true; setSetupStatus('Creando evento en Supabase...');
+      try {
+        state.config = await createEventFromForm();
+        history.replaceState({}, '', buildUrl(state.config, 'admin'));
+        dom.appTitle.textContent = state.config.title;
+        dom.appSubtitle.textContent = 'Evento en curso · ' + state.config.accessItems.length + ' accesos';
+        await fetchRows();
+        renderCurrentRoute();
+        startPolling();
+        setSetupStatus('Evento creado correctamente.', 'success');
+      } catch (error) {
+        setSetupStatus('No se pudo crear el evento. Revisa el SQL, la Project URL y la publishable key.', 'error');
+      } finally {
+        state.busy = false; dom.createEventButton.disabled = false;
+      }
     });
-    dom.configForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const config = createConfigFromForm();
-      setUrlForRoute(config, 'admin');
-      connectEvent(config);
-    });
+    dom.resetButton.addEventListener('click', resetAllCounts);
+    dom.plusButton.addEventListener('click', () => updateSingleAccess(1));
+    dom.minusButton.addEventListener('click', () => updateSingleAccess(-1));
     dom.themeToggle.addEventListener('click', () => setTheme(state.theme === 'dark' ? 'light' : 'dark'));
-    dom.homeButton.addEventListener('click', () => { if (state.config) setUrlForRoute(state.config, 'admin'); renderCurrentRoute(); });
-    dom.resetButton.addEventListener('click', () => { if (confirm('¿Quieres reiniciar todos los conteos del evento?')) addLog('reset'); });
-    addEventListener('hashchange', renderCurrentRoute);
-    addEventListener('online', updateSyncChip);
-    addEventListener('offline', updateSyncChip);
+    dom.homeButton.addEventListener('click', () => { if (state.config && (state.config.mode === 'admin' || state.config.accessItems)) { state.config.mode = 'admin'; history.replaceState({}, '', buildUrl(state.config, 'admin')); renderCurrentRoute(); startPolling(); } else { history.replaceState({}, '', appBaseUrl() + '#config'); stopPolling(); showView('config'); } });
+    addEventListener('hashchange', () => { renderCurrentRoute(); startPolling(); });
+    addEventListener('online', () => updateSyncChip(true, 'Sincronización activa'));
+    addEventListener('offline', () => updateSyncChip(false, 'Sin conexión'));
+
     (function init() {
       setTheme(state.theme);
-      updateSyncChip();
       renderAccessNameFields(Number(dom.accessCount.value), ['Entrada principal', 'Acceso lateral']);
-      if (/^https?:$/i.test(location.protocol)) dom.publicBaseUrl.value = location.origin + location.pathname;
-      const config = getConfigFromUrl();
-      if (config && config.title && Array.isArray(config.accesses) && config.accesses.length) connectEvent(config); else showView('config');
+      const cfg = getCfgFromUrl();
+      if (cfg) {
+        state.config = cfg;
+        dom.appTitle.textContent = cfg.title || 'Control de aforo · v5';
+        dom.appSubtitle.textContent = cfg.mode === 'access' ? 'Modo acceso' : cfg.mode === 'total' ? 'Vista total' : 'Panel del evento';
+        renderCurrentRoute();
+        startPolling();
+      } else {
+        showView('config');
+      }
     })();
   </script>
 </body>
