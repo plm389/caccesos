@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Aforo - Eventos</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode.js/1.5.3/qrcode.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- PANEL DE CONFIGURACIÓN -->
+        <div id="configPanel" class="panel active">
+            <div class="container">
+                <h1>⚙️ Configuración del Evento</h1>
+                
+                <form id="configForm">
+                    <div class="form-group">
+                        <label for="eventTitle">Título del Evento *</label>
+                        <input type="text" id="eventTitle" placeholder="Ej: Concierto 2026" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maxCapacity">Aforo Máximo *</label>
+                        <input type="number" id="maxCapacity" placeholder="Ej: 500" min="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="numAccess">Número de Accesos *</label>
+                        <input type="number" id="numAccess" placeholder="Ej: 4" min="1" max="10" required>
+                    </div>
+
+                    <div id="accessesContainer"></div>
+
+                    <button type="submit" class="btn btn-primary">Generar Códigos QR</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- PANEL DE CÓDIGOS QR -->
+        <div id="qrPanel" class="panel">
+            <div class="container">
+                <h1>📱 Códigos QR Generados</h1>
+                <p class="subtitle" id="eventTitleDisplay"></p>
+                
+                <div id="qrContainer" class="qr-grid"></div>
+
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="app.backToConfig()">← Volver a Configuración</button>
+                    <button class="btn btn-success" onclick="app.downloadAllQR()">⬇️ Descargar todos los QR</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANEL DE CONTROL DE ACCESO -->
+        <div id="controlPanel" class="panel">
+            <div class="container control-container">
+                <div class="access-info">
+                    <h2 id="accessName"></h2>
+                    <p id="eventNameControl"></p>
+                </div>
+
+                <div class="counter-section">
+                    <div class="counter-display">
+                        <p class="counter-label">Personas en el acceso</p>
+                        <div class="counter-value" id="counter">0</div>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn btn-lg btn-success" onclick="app.increment()">➕ Entrada</button>
+                        <button class="btn btn-lg btn-danger" onclick="app.decrement()">➖ Salida</button>
+                    </div>
+
+                    <button class="btn btn-secondary" onclick="app.resetCounter()">🔄 Reiniciar Contador</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANEL DE VISUALIZACIÓN GENERAL -->
+        <div id="dashboardPanel" class="panel">
+            <div class="container dashboard-container">
+                <h1 id="dashboardTitle"></h1>
+                
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <h3>Personas Totales</h3>
+                        <div class="stat-number" id="totalPeople">0</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Aforo Máximo</h3>
+                        <div class="stat-number" id="maxCapacityDisplay">0</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Capacidad Disponible</h3>
+                        <div class="stat-number" id="availableCapacity">0</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Ocupación</h3>
+                        <div class="stat-number" id="occupancyPercent">0%</div>
+                    </div>
+                </div>
+
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progressBar"></div>
+                </div>
+
+                <div id="accessesStatusContainer" class="accesses-status"></div>
+
+                <button class="btn btn-secondary" onclick="app.backToConfig()">← Volver a Configuración</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
