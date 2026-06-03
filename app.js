@@ -107,22 +107,27 @@ class EventCapacityApp {
 
             container.appendChild(card);
 
-            // Generar QR
-            const qrData = {
-                type: 'access',
-                accessId: access.id,
-                accessName: access.name,
-                eventTitle: this.eventData.title
-            };
+            // Esperar a que el elemento se agregue al DOM antes de generar QR
+            setTimeout(() => {
+                const qrElement = document.getElementById(`qr_${access.id}`);
+                if (qrElement) {
+                    const qrData = {
+                        type: 'access',
+                        accessId: access.id,
+                        accessName: access.name,
+                        eventTitle: this.eventData.title
+                    };
 
-            new QRCode(document.getElementById(`qr_${access.id}`), {
-                text: JSON.stringify(qrData),
-                width: 200,
-                height: 200,
-                colorDark: '#2563eb',
-                colorLight: '#ffffff',
-                correctLevel: QRCode.CorrectLevel.H
-            });
+                    new QRCode(qrElement, {
+                        text: JSON.stringify(qrData),
+                        width: 200,
+                        height: 200,
+                        colorDark: '#2563eb',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                }
+            }, 10);
         });
 
         // QR para visualización general
@@ -141,19 +146,24 @@ class EventCapacityApp {
 
         container.appendChild(dashboardCard);
 
-        const dashboardQRData = {
-            type: 'dashboard',
-            eventTitle: this.eventData.title
-        };
+        setTimeout(() => {
+            const dashboardElement = document.getElementById('qr_dashboard');
+            if (dashboardElement) {
+                const dashboardQRData = {
+                    type: 'dashboard',
+                    eventTitle: this.eventData.title
+                };
 
-        new QRCode(document.getElementById('qr_dashboard'), {
-            text: JSON.stringify(dashboardQRData),
-            width: 200,
-            height: 200,
-            colorDark: '#10b981',
-            colorLight: '#ffffff',
-            correctLevel: QRCode.CorrectLevel.H
-        });
+                new QRCode(dashboardElement, {
+                    text: JSON.stringify(dashboardQRData),
+                    width: 200,
+                    height: 200,
+                    colorDark: '#10b981',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }
+        }, 10);
 
         this.showPanel('qrPanel');
     }
@@ -357,5 +367,7 @@ class EventCapacityApp {
     }
 }
 
-// Inicializar la app cuando el DOM esté listo
-const app = new EventCapacityApp();
+// Inicializar la app cuando el DOM esté completamente cargado
+document.addEventListener('DOMContentLoaded', function() {
+    window.app = new EventCapacityApp();
+});
